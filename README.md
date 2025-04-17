@@ -24,7 +24,7 @@ This project follows a *microservices-inspired architecture,* with the backend h
 
 ```
 +-----------------------------------------------------------+
-|                  Frontend (React.js / Angular)       |
+|                  Frontend (Thymeleaf)       |
 |   - Displays news feed, bookmarks, search, categories    |
 |   - Calls backend APIs to fetch news, user preferences   |
 +-----------------------------------------------------------+
@@ -37,13 +37,13 @@ This project follows a *microservices-inspired architecture,* with the backend h
 +-----------------------------------------------------------+
                          ⬆   ⬆   ⬆
 +-----------------------------------------------------------+
-|                    Database Layer (PostgreSQL)           |
+|                    Database Layer (MySQL)           |
 | - Stores articles, user preferences, bookmarks           |
 | - Stores categorized & indexed news data                 |
 +-----------------------------------------------------------+
                          ⬆   ⬆   ⬆
 +-----------------------------------------------------------+
-|      External APIs (NASA, SpaceX, Google News, RSS)      |
+|      External APIs (NASA, The Space Devs)      |
 |      AI APIs (GPT for summarization, ML for sentiment)   |
 +-----------------------------------------------------------+
 ```
@@ -54,25 +54,24 @@ This project follows a *microservices-inspired architecture,* with the backend h
 
 ### 🖥 Backend (Spring Boot)  
 - **Spring Boot** (REST API + Business Logic)  
-- **Spring Data JPA** (PostgreSQL Database)  
+- **Spring Data JPA** (MySQL Database)  
 - **Spring Batch** (Scheduled Scraping Jobs)  
 - **Spring WebFlux** (Asynchronous API Calls)  
 - **Spring Security** (User Auth using JWT)  
 - **Spring Data Elasticsearch** (Fast search & indexing)  
 
 ### 📡 News Aggregation & AI  
-- **JSoup / Scrapy** (For web scraping)  
-- **Google News API / RSS Feeds** (For fetching space news)  
+- **NASA, The Space Devs** (For fetching space news)  
 - **TensorFlow / OpenAI API** (For NLP-based news summaries)  
 - **Python Flask Microservice** (For AI-based text analysis)  
 
 ### 🖥 Frontend  
-- **React.js / Angular** (UI framework)  
+- **Thymeleaf** (UI framework)  
 - **Axios** (For calling Spring Boot APIs)  
 - **Chart.js / D3.js** (For visualizing trends in space news)  
 
 ### 🗄 Database  
-- **PostgreSQL** (Main database for storing news & users)  
+- **MySQL** (Main database for storing news & users)  
 - **Elasticsearch** (For fast search queries)  
 
 ---
@@ -81,14 +80,14 @@ This project follows a *microservices-inspired architecture,* with the backend h
 
 ### 🔹 1. News Aggregation Module 📰  
 📌 Fetches, processes, and stores space news  
-✅ Fetch latest articles from NASA, ESA, SpaceX, RSS Feeds  
+✅ Fetch latest articles from NASA, The Space Devs 
 ✅ Web scraping for sources without APIs  
-✅ Stores structured news data in PostgreSQL  
+✅ Stores structured news data in MySQL  
 
 **Spring Boot Implementation:**  
 - Spring Batch for scheduled jobs  
 - REST APIs for manual updates  
-- JSoup for web scraping  
+ 
 
 ---
 
