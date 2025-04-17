@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NASA API - APOD</title>
+</head>
+<body>
+<h1>NASA Astronomy Picture of the Day</h1>
+<div th:if="${apod}">
+    <p th:text="${apod.date}"></p>
+    <img th:src="${apod.url}" style="max-width: 600px;" />
+    <p th:text="${apod.explanation}"></p>
+</div>
+</body>
+</html>
