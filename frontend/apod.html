@@ -2,39 +2,254 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NASA Astronomy Picture of the Day</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    img { max-width: 100%; height: auto; }
+    /* Styles globaux */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0b0c10;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* En-tête */
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      color: #66fcf1;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-top: 0;
+      color: #66fcf1;
+    }
+
+    /* Conteneur principal de l'APOD */
+    #apod-content {
+      background-color: #1f2833;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      max-width: 900px;
+      margin: 0 auto;
+      color: #fff;
+      text-align: center;
+    }
+
+    /* Détails de la date */
+    p {
+      font-size: 1.1rem;
+      color: #a1a1a1;
+    }
+
+    /* Conteneur de l'image */
+    img {
+      display: block;
+      margin: 20px auto;
+      max-width: 60%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Texte explicatif */
+    .explanation {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #d1d1d1;
+    }
+
+    /* Loader */
+    .loader {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #888;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 30px;
+    }
+
+    footer a {
+      color: #66fcf1;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Champ de recherche */
+    #search-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #search-container input {
+      padding: 10px;
+      font-size: 1rem;
+      width: 200px;
+      margin-right: 10px;
+      border: none;
+      background-color: #1f2833;
+      color: #fff;
+      border-radius: 5px;
+    }
+
+    #search-container button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #66fcf1;
+      color: #000;
+      border: none;
+      cursor: pointer;
+    }
+
+    #search-container button:hover {
+      background-color: #45a1b3;
+    }
+
+    /* Boutons de navigation */
+    .nav-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .nav-buttons button {
+      padding: 10px;
+      background-color: #66fcf1;
+      color: #000;
+      border: none;
+      cursor: pointer;
+      width: 48%;
+    }
+
+    .nav-buttons button:hover {
+      background-color: #45a1b3;
+    }
+
+    /* Style pour le calendrier */
+    input[type="date"] {
+      background-color: #1f2833;
+      color: #fff;
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+    }
+
+    /* Bouton retour à l'accueil */
+    #home-button {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      background-color: #66fcf1;
+      color: #000;
+      border: none;
+      cursor: pointer;
+      display: block;
+      margin: 30px auto;
+      width: 200px;
+      text-align: center;
+    }
+
+    #home-button:hover {
+      background-color: #45a1b3;
+    }
   </style>
 </head>
 <body>
-  <h1>NASA Astronomy Picture of the Day</h1>
-  <div id="apod-content">
-    <p>Chargement...</p>
+
+  <header>
+    <h1>NASA Astronomy Picture of the Day</h1>
+  </header>
+
+  <!-- Recherche par date -->
+  <div id="search-container">
+    <label for="date-input">Sélectionnez une date:</label>
+    <input type="date" id="date-input" />
+    <button onclick="searchAPOD()">Rechercher</button>
   </div>
 
-  <script>
-    // Remplace "YOUR_API_KEY_HERE" par ta clé personnelle reçue par mail
-    const apiKey = "0mOIG3D2i5Bu3MNauyX1hznLdR8adSZOKDbfZVZc";
-    const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
+  <!-- Contenu principal -->
+  <div id="apod-content">
+    <div class="loader">
+      <p>Chargement...</p>
+    </div>
+  </div>
 
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        const container = document.getElementById("apod-content");
-        container.innerHTML = `
-          <h2>${data.title}</h2>
-          <p><strong>Date:</strong> ${data.date}</p>
-          <img src="${data.url}" alt="${data.title}" />
-          <p>${data.explanation}</p>
-        `;
-      })
-      .catch(error => {
-        document.getElementById("apod-content").innerHTML =
-          "<p>Erreur lors du chargement de l'image.</p>";
-        console.error("Erreur:", error);
-      });
+  <!-- Navigation -->
+  <div class="nav-buttons">
+    <button onclick="loadAPOD('previous')">Précédent</button>
+    <button onclick="loadAPOD('next')">Suivant</button>
+  </div>
+
+  <!-- Bouton retour à l'accueil -->
+  <button id="home-button" onclick="window.location.href='index.html'">Retour à l'Accueil</button>
+
+  <footer>
+    <p>Source: <a href="https://api.nasa.gov/" target="_blank">NASA API</a></p>
+  </footer>
+
+  <script>
+    const apiKey = "0mOIG3D2i5Bu3MNauyX1hznLdR8adSZOKDbfZVZc";
+    let currentDate = new Date().toISOString().split('T')[0]; // Date actuelle
+    let currentData = null;
+
+    function fetchAPOD(date) {
+      const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          currentData = data;
+          const container = document.getElementById("apod-content");
+          container.innerHTML = `
+            <h2>${data.title}</h2>
+            <p><strong>Date:</strong> ${data.date}</p>
+            <img src="${data.url}" alt="${data.title}" />
+            <p class="explanation">${data.explanation}</p>
+          `;
+        })
+        .catch(error => {
+          document.getElementById("apod-content").innerHTML =
+            "<p>Erreur lors du chargement de l'image.</p>";
+          console.error("Erreur:", error);
+        });
+    }
+
+    function searchAPOD() {
+      const date = document.getElementById("date-input").value;
+      if (date) {
+        currentDate = date;
+        fetchAPOD(date);
+      }
+    }
+
+    function loadAPOD(direction) {
+      const date = new Date(currentDate);
+      if (direction === 'previous') {
+        date.setDate(date.getDate() - 1); // Précédent
+      } else if (direction === 'next') {
+        date.setDate(date.getDate() + 1); // Suivant
+      }
+      currentDate = date.toISOString().split('T')[0];
+      fetchAPOD(currentDate);
+    }
+
+    // Chargement initial de l'APOD
+    fetchAPOD(currentDate);
   </script>
+
 </body>
 </html>
