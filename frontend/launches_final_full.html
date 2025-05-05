@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<!--
+	24 News by FreeHTML5.co
+	Twitter: https://twitter.com/fh5co
+	Facebook: https://fb.com/fh5co
+	URL: https://freehtml5.co
+-->
+<html class="no-js" lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<title>Smart Space News Aggregator</title>
+<link href="css/media_query.css" rel="stylesheet" type="text/css"/>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" rel="stylesheet"/>
+<link href="css/animate.css" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet"/>
+<link href="css/owl.carousel.css" rel="stylesheet" type="text/css"/>
+<link href="css/owl.theme.default.css" rel="stylesheet" type="text/css"/>
+<!-- Bootstrap CSS -->
+<link href="css/style_1.css" rel="stylesheet" type="text/css"/>
+<!-- Modernizr JS -->
+<style>
+.launch-img {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1 / 1;
+                object-fit: cover;
+                object-position: center center;
+                border-radius: 10px 10px 0 0;
+            }
+
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-body {
+    padding: 1rem 1.2rem;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.card-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+
+.modal-body img  {
+    max-height: 200px;
+    width: auto;
+    display: block;
+    margin: 0 auto 1rem auto;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.modal-body img {
+    max-height: 300px;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto 1rem auto;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+}
+</style><style>
+.launch-card-custom .card-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.badge-success {
+  background-color: #28a745;
+  color: white;
+  padding: 0.25em 0.5em;
+  border-radius: 0.25rem;
+}
+</style></head>
+<body>
+<!--<div class="container-fluid fh5co_header_bg">-->
+<!--    <div class="container">-->
+<!--        <div class="row">-->
+<!--            <div class="col-12 fh5co_mediya_center"><a href="#" class="color_fff fh5co_mediya_setting"><i-->
+<!--                    class="fa fa-clock-o"></i>&nbsp;&nbsp;&nbsp;Friday, 5 January 2018</a>-->
+<!--                <div class="d-inline-block fh5co_trading_posotion_relative"><a href="#" class="treding_btn">Trending</a>-->
+<!--                    <div class="fh5co_treding_position_absolute"></div>-->
+<!--                </div>-->
+<!--                <a href="#" class="color_fff fh5co_mediya_setting">Instagram’s big redesign goes live with black-and-white app</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="container-fluid">
+</div>
+<div class="container-fluid bg-faded fh5co_padd_mediya padding_786">
+</div>
+<div class="container-fluid pb-4 pt-4 paddding">
+</div>
+<div class="container-fluid pb-4 pt-5">
+</div>
+<div class="container-fluid fh5co_footer_bg pb-3">
+</div>
+<div class="container-fluid fh5co_footer_right_reserved">
+</div>
+<div class="gototop js-top">
+<a class="js-gotop" href="#"><i class="fa fa-arrow-up"></i></a>
+</div>
+<!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>-->
+<!-- Waypoints -->
+<!-- Main -->
+<div class="container mt-5">
+<h2 class="text-center mb-4">Upcoming Space Launches</h2>
+<div class="container mt-4">
+<div class="row mb-3">
+<div class="col-md-6">
+<input class="form-control" id="search-name" placeholder="Search by launch name..." type="text"/>
+</div>
+<div class="col-md-6">
+<input class="form-control" id="search-date" type="date"/>
+</div>
+</div>
+<div class="row mb-3">
+<div class="col-md-12">
+<select class="form-control" id="sort-order">
+<option value="asc">Sort by Date: Ascending</option>
+<option value="desc">Sort by Date: Descending</option>
+</select>
+</div>
+</div>
+</div>
+<div class="row" id="launches-container"></div>
+<div class="text-center mt-4">
+<button class="btn btn-primary" id="load-more">Load more</button>
+</div>
+</div>
+<!-- Modal -->
+<div aria-hidden="true" aria-labelledby="launchModalLabel" class="modal fade" id="launchModal" role="dialog" tabindex="-1">
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="launchModalLabel">Launch Details</h5>
+<button aria-label="Close" class="close" data-dismiss="modal" type="button">
+<span aria-hidden="true">×</span>
+</button>
+</div>
+<div class="modal-body" id="launchModalBody">
+<!-- Dynamic content here -->
+</div>
+</div>
+</div>
+</div>
+<!-- jQuery, Popper.js, Bootstrap JS (modals require these) -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const nameInput = document.getElementById("search-name");
+  const dateInput = document.getElementById("search-date");
+  const sortOrder = document.getElementById("sort-order");
+
+  function filterAndSortLaunches() {
+    const nameFilter = nameInput.value.toLowerCase();
+    const dateFilter = dateInput.value;
+    const cards = Array.from(document.querySelectorAll("#launches-container .card")).map(card => card.parentElement);
+
+    cards.forEach(container => {
+      const card = container.querySelector(".card");
+      const title = card.querySelector(".card-title").textContent.toLowerCase();
+      const subtitle = card.querySelector(".card-subtitle").textContent;
+      const matchName = title.includes(nameFilter);
+      const matchDate = !dateFilter || subtitle.includes(dateFilter);
+      container.style.display = (matchName && matchDate) ? "" : "none";
+    });
+
+    const visibleCards = cards.filter(c => c.style.display !== "none");
+
+    visibleCards.sort((a, b) => {
+      const dateA = new Date(a.querySelector(".card-subtitle").textContent);
+      const dateB = new Date(b.querySelector(".card-subtitle").textContent);
+      return sortOrder.value === "asc" ? dateA - dateB : dateB - dateA;
+    });
+
+    const container = document.getElementById("launches-container");
+    visibleCards.forEach(card => container.appendChild(card));
+  }
+
+  nameInput.addEventListener("input", filterAndSortLaunches);
+  dateInput.addEventListener("input", filterAndSortLaunches);
+  sortOrder.addEventListener("change", filterAndSortLaunches);
+});
+</script><script>
+let nextPageUrl = "https://ll.thespacedevs.com/2.2.0/launch/?upcoming=true&limit=10&ordering=net";
+
+function loadLaunches() {
+    if (!nextPageUrl) return;
+    fetch(nextPageUrl)
+        .then(response => response.json())
+        .then(data => {
+            nextPageUrl = data.next;
+            if (nextPageUrl) {
+                const url = new URL(nextPageUrl);
+                url.searchParams.set("upcoming", "true");
+                nextPageUrl = url.toString();
+            }
+            const launches = data.results;
+            launches.forEach((launch, index) => {
+                const date = new Date(launch.net);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = date.toLocaleString('default', { month: 'short' }).toUpperCase();
+                const card = document.createElement("div");
+                card.className = "col-md-6";
+                card.innerHTML = `
+                    <div class="card shadow-sm rounded border-0 mb-4 launch-card-custom" data-index="${index}" data-toggle="modal" data-target="#launchModal" style="cursor:pointer;">
+                      <div class="d-flex">
+                        <div class="bg-primary text-white text-center p-3" style="min-width: 80px;">
+                          <div class="h4 mb-0">${day}</div>
+                          <small>${month}</small>
+                        </div>
+                        <div class="card-body">
+                          <h5 class="card-title mb-1">${launch.name}</h5>
+                          <h6 class="text-muted">${launch.launch_service_provider.name}</h6>
+                          <p class="mb-1"><strong>Site:</strong> ${launch.pad ? launch.pad.name : 'N/A'}</p>
+                          <p class="mb-1"><strong>Status:</strong> <span class="badge badge-success">${launch.status.name}</span></p>
+                        </div>
+                      </div>
+                    </div>`;
+                document.getElementById("launches-container").appendChild(card);
+
+                card.querySelector(".card").addEventListener("click", () => {
+                    const body = document.getElementById("launchModalBody");
+                    document.getElementById("launchModalLabel").textContent = launch.name;
+                    body.innerHTML = `
+                        <p><strong>Launch Provider:</strong> ${launch.launch_service_provider.name}</p>
+                        <p><strong>Window Start:</strong> ${new Date(launch.window_start).toLocaleString()}</p>
+                        <p><strong>Window End:</strong> ${new Date(launch.window_end).toLocaleString()}</p>
+                        <p><strong>Pad:</strong> ${launch.pad ? launch.pad.name + ' - ' + launch.pad.location.name : 'N/A'}</p>
+                        <p><strong>Mission Description:</strong> ${launch.mission ? launch.mission.description : 'No description available.'}</p>
+                        <p><strong>Status:</strong> ${launch.status.name}</p>`;
+                });
+            });
+            if (!nextPageUrl) {
+                document.getElementById("load-more").style.display = "none";
+            }
+        })
+        .catch(error => {
+            console.error("Error loading launches:", error);
+        });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadLaunches();
+    document.getElementById("load-more").addEventListener("click", loadLaunches);
+});
+</script></body>
+</html>
