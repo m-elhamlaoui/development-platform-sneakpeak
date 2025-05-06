@@ -1,0 +1,7 @@
+com\space\news\model\Article.class
+com\space\news\repository\ArticleRepository.class
+com\space\news\config\CorsConfig.class
+com\space\news\config\SecurityConfig.class
+com\space\news\NewsApplication.class
+com\space\news\service\NewsService.class
+com\space\news\controller\NewsController.class
