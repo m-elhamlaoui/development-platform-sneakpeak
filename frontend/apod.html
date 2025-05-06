@@ -5,167 +5,338 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NASA Astronomy Picture of the Day</title>
   <style>
-    /* Styles globaux */
+    /* Nouveau style à intégrer */
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #0b0c10;
-      color: #ffffff;
-      margin: 0;
-      padding: 20px;
+        background: url('https://images.pexels.com/photos/1146134/pexels-photo-1146134.jpeg?auto=compress&cs=tinysrgb&h=1200&w=1800&dpr=2') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+        font-family: 'Segoe UI', Roboto, sans-serif;
     }
-
-    /* En-tête */
     header {
-      text-align: center;
-      margin-bottom: 30px;
+        text-align: center;
+        padding: 30px 20px;
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px); /* Flou en arrière-plan */
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
     }
-
-    h1 {
-      color: #66fcf1;
-      font-size: 2.5rem;
-      margin-bottom: 10px;
+    header h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Effet de texte */
     }
-
-    h2 {
-      font-size: 2rem;
-      margin-top: 0;
-      color: #66fcf1;
-    }
-
-    /* Conteneur principal de l'APOD */
-    #apod-content {
-      background-color: #1f2833;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-      max-width: 900px;
-      margin: 0 auto;
-      color: #fff;
-      text-align: center;
-    }
-
-    /* Détails de la date */
-    p {
-      font-size: 1.1rem;
-      color: #a1a1a1;
-    }
-
-    /* Conteneur de l'image */
-    img {
-      display: block;
-      margin: 20px auto;
-      max-width: 60%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Texte explicatif */
-    .explanation {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #d1d1d1;
-    }
-
-    /* Loader */
-    .loader {
-      text-align: center;
-      font-size: 1.2rem;
-      color: #888;
-    }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #777;
-      margin-top: 30px;
-    }
-
-    footer a {
-      color: #66fcf1;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    /* Champ de recherche */
     #search-container {
-      text-align: center;
-      margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
     }
-
-    #search-container input {
-      padding: 10px;
-      font-size: 1rem;
-      width: 200px;
-      margin-right: 10px;
-      border: none;
-      background-color: #1f2833;
-      color: #fff;
-      border-radius: 5px;
+    #search-container:hover {
+        transform: scale(1.05); /* Effet d'agrandissement au survol */
     }
-
-    #search-container button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #66fcf1;
-      color: #000;
-      border: none;
-      cursor: pointer;
+    select, input[type="date"] {
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: none;
+        background: #12284a;
+        color: white;
+        font-weight: 500;
+        margin: 0 10px;
+        transition: background 0.3s ease;
     }
-
-    #search-container button:hover {
-      background-color: #45a1b3;
+    select:hover, input[type="date"]:hover {
+        background-color: #1a3c5b;
     }
-
-    /* Boutons de navigation */
+    button {
+        padding: 10px 20px;
+        background-color: #ff7f50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #ff4500;
+    }
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+    .card {
+        background: rgba(0, 0, 20, 0.7);
+        border-radius: 12px;
+        overflow: hidden;
+        transform: translateY(20px);
+        opacity: 0;
+        transition: transform 0.6s ease, opacity 0.6s ease, box-shadow 0.3s ease;
+        box-shadow: 0 0 15px rgba(30, 144, 255, 0.2);
+    }
+    .card.visible {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    .card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 30px rgba(30, 144, 255, 0.4);
+    }
+    .card img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    .card-info {
+        padding: 18px;
+    }
+    .card-info strong {
+        color: #72b7ff;
+        font-size: 1.1rem;
+        display: block;
+        margin-bottom: 6px;
+    }
+    .highlight {
+        margin: 0 auto 30px;
+        text-align: center;
+    }
+    .highlight img {
+        width: 80%;
+        max-width: 600px;
+        border-radius: 10px;
+        margin-top: 15px;
+        transition: transform 0.5s ease;
+    }
+    .highlight img:hover {
+        transform: scale(1.03);
+    }
+    .highlight p {
+        background-color: rgba(0, 0, 0, 0.5);
+        display: inline-block;
+        padding: 10px 15px;
+        margin-top: 10px;
+        border-radius: 5px;
+        font-size: 0.95rem;
+    }
     .nav-buttons {
-      margin-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      max-width: 400px;
-      margin: 0 auto;
+        text-align: center;
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
     }
-
-    .nav-buttons button {
-      padding: 10px;
-      background-color: #66fcf1;
-      color: #000;
-      border: none;
-      cursor: pointer;
-      width: 48%;
+    .nav-btn {
+        padding: 12px 24px;
+        background-color: rgba(20, 50, 80, 0.7);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 120px;
+        border: 1px solid rgba(100, 149, 237, 0.2);
     }
-
-    .nav-buttons button:hover {
-      background-color: #45a1b3;
+    .prev-btn:hover {
+        background-color: rgba(30, 70, 110, 0.9);
+        transform: translateX(-5px);
     }
-
-    /* Style pour le calendrier */
-    input[type="date"] {
-      background-color: #1f2833;
-      color: #fff;
-      padding: 10px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 5px;
+    .next-btn:hover {
+        background-color: rgba(30, 70, 110, 0.9);
+        transform: translateX(5px);
     }
-
-    /* Bouton retour à l'accueil */
+    .today-btn {
+        background-color: rgba(65, 105, 225, 0.7);
+    }
+    .today-btn:hover {
+        background-color: rgba(65, 105, 225, 0.9);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(65, 105, 225, 0.4);
+    }
+    .arrow {
+        font-size: 0.8rem;
+        transition: transform 0.3s ease;
+    }
+    .prev-btn:hover .arrow {
+        transform: translateX(-3px);
+    }
+    .next-btn:hover .arrow {
+        transform: translateX(3px);
+    }
     #home-button {
-      padding: 10px 20px;
-      font-size: 1.2rem;
-      background-color: #66fcf1;
-      color: #000;
-      border: none;
-      cursor: pointer;
-      display: block;
-      margin: 30px auto;
-      width: 200px;
-      text-align: center;
+        display: block;
+        margin: 30px auto;
+        padding: 12px 25px;
+        background-color: rgba(20, 20, 40, 0.7);
+        transition: all 0.3s ease;
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
-
     #home-button:hover {
-      background-color: #45a1b3;
+        background-color: rgba(40, 40, 60, 0.9);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .home-icon {
+        margin-right: 8px;
+        font-size: 1.2rem;
+    }
+    footer {
+        text-align: center;
+        padding: 15px;
+        background-color: rgba(0, 0, 0, 0.7);
+        margin-top: 20px;
+    }
+    #apod-content {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: rgba(0, 0, 20, 0.8);
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        transform: translateY(0);
+        transition: transform 0.5s ease, box-shadow 0.5s ease;
+        border: 1px solid rgba(65, 105, 225, 0.3);
+    }
+    #apod-content:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(30, 144, 255, 0.4);
+    }
+    #apod-content h2 {
+        color: #72b7ff;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        transform: scale(1);
+        transition: transform 0.3s ease;
+    }
+    #apod-content h2:hover {
+        transform: scale(1.03);
+    }
+    #apod-content img {
+        max-width: 75%;
+        border-radius: 12px;
+        margin: 20px auto;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+        transition: all 0.4s ease;
+        display: block;
+    }
+    #apod-content img:hover {
+        transform: scale(1.03);
+        box-shadow: 0 8px 20px rgba(30, 144, 255, 0.5);
+    }
+    .explanation {
+        text-align: left;
+        line-height: 1.7;
+        font-size: 1.05rem;
+        padding: 15px;
+        background-color: rgba(0, 10, 30, 0.5);
+        border-radius: 10px;
+        margin-top: 20px;
+        opacity: 0.9;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        border-left: 3px solid #72b7ff;
+    }
+    .explanation:hover {
+        opacity: 1;
+        transform: translateX(5px);
+    }
+    .date-display {
+        background-color: rgba(30, 60, 90, 0.6);
+        display: inline-block;
+        padding: 8px 15px;
+        border-radius: 20px;
+        margin: 10px 0;
+        font-weight: 600;
+        letter-spacing: 1px;
+        border: 1px solid rgba(100, 149, 237, 0.3);
+        transition: background-color 0.3s ease;
+    }
+    .date-display:hover {
+        background-color: rgba(50, 80, 120, 0.7);
+    }
+    .loader {
+        text-align: center;
+        padding: 40px;
+        position: relative;
+    }
+    .loader p {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+        animation: pulse 1.5s infinite alternate;
+    }
+    .loading-stars {
+        margin-top: 15px;
+    }
+    .loading-stars span {
+        display: inline-block;
+        font-size: 2rem;
+        margin: 0 5px;
+        animation: twinkle 1.5s infinite alternate;
+    }
+    .loading-stars span:nth-child(2) {
+        animation-delay: 0.5s;
+    }
+    .loading-stars span:nth-child(3) {
+        animation-delay: 1s;
+    }
+    @keyframes pulse {
+        0% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+    @keyframes twinkle {
+        0% { transform: scale(1); opacity: 0.3; }
+        100% { transform: scale(1.5); opacity: 1; color: #72b7ff; }
+    }
+    .animate-title {
+        animation: fadeInDown 0.8s ease forwards;
+    }
+    .media-container {
+        animation: fadeIn 1s ease 0.3s forwards;
+        opacity: 0;
+    }
+    .explanation-container {
+        animation: slideInRight 0.8s ease 0.5s forwards;
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    .explanation-container h3 {
+        color: #72b7ff;
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+    .copyright {
+        font-style: italic;
+        font-size: 0.9rem;
+        margin-top: 15px;
+        color: #aaa;
+    }
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
     }
   </style>
 </head>
@@ -191,12 +362,21 @@
 
   <!-- Navigation -->
   <div class="nav-buttons">
-    <button onclick="loadAPOD('previous')">Précédent</button>
-    <button onclick="loadAPOD('next')">Suivant</button>
+    <button onclick="loadAPOD('previous')" class="nav-btn prev-btn">
+      <span class="arrow">&#10094;</span> Précédent
+    </button>
+    <button onclick="loadAPOD('today')" class="nav-btn today-btn">
+      Aujourd'hui
+    </button>
+    <button onclick="loadAPOD('next')" class="nav-btn next-btn">
+      Suivant <span class="arrow">&#10095;</span>
+    </button>
   </div>
 
   <!-- Bouton retour à l'accueil -->
-  <button id="home-button" onclick="window.location.href='index.html'">Retour à l'Accueil</button>
+  <button id="home-button" onclick="window.location.href='index.html'">
+    <span class="home-icon">&#8962;</span> Retour à l'Accueil
+  </button>
 
   <footer>
     <p>Source: <a href="https://api.nasa.gov/" target="_blank">NASA API</a></p>
@@ -207,25 +387,87 @@
     let currentDate = new Date().toISOString().split('T')[0]; // Date actuelle
     let currentData = null;
 
+    // Initialiser la date dans le champ de recherche
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('date-input').value = currentDate;
+      fetchAPOD(currentDate); // Charger automatiquement l'APOD du jour au chargement
+      
+      // Animation du titre principal
+      const header = document.querySelector('header h1');
+      header.style.opacity = '0';
+      header.style.transform = 'translateY(-20px)';
+      header.style.transition = 'opacity 1s ease, transform 1s ease';
+      
+      setTimeout(() => {
+        header.style.opacity = '1';
+        header.style.transform = 'translateY(0)';
+      }, 300);
+    });
+
     function fetchAPOD(date) {
+      const container = document.getElementById("apod-content");
+      container.style.opacity = '0';
+      container.style.transform = 'translateY(20px)';
+      
+      container.innerHTML = `<div class="loader">
+                                <p>Chargement de l'image du ${formatDate(date)}...</p>
+                                <div class="loading-stars">
+                                  <span>⋆</span><span>⋆</span><span>⋆</span>
+                                </div>
+                             </div>`;
+      
+      setTimeout(() => {
+        container.style.opacity = '1';
+        container.style.transform = 'translateY(0)';
+      }, 200);
+      
       const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}`;
       fetch(url)
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then(data => {
           currentData = data;
-          const container = document.getElementById("apod-content");
-          container.innerHTML = `
-            <h2>${data.title}</h2>
-            <p><strong>Date:</strong> ${data.date}</p>
-            <img src="${data.url}" alt="${data.title}" />
-            <p class="explanation">${data.explanation}</p>
-          `;
+          // Ajout d'un délai pour une meilleure animation
+          setTimeout(() => {
+            displayAPOD(data);
+          }, 300);
         })
         .catch(error => {
-          document.getElementById("apod-content").innerHTML =
-            "<p>Erreur lors du chargement de l'image.</p>";
+          container.innerHTML = `<p>Erreur lors du chargement de l'image: ${error.message}</p>`;
           console.error("Erreur:", error);
         });
+    }
+    
+    // Fonction pour formater la date en français
+    function formatDate(dateStr) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateStr).toLocaleDateString('fr-FR', options);
+    }
+
+    function displayAPOD(data) {
+      const container = document.getElementById("apod-content");
+      
+      // Déterminer s'il s'agit d'une image ou d'une vidéo
+      let mediaContent = '';
+      if (data.media_type === 'video') {
+        mediaContent = `<iframe width="100%" height="400" src="${data.url}" frameborder="0" allowfullscreen></iframe>`;
+      } else {
+        mediaContent = `<img src="${data.url}" alt="${data.title}" />`;
+      }
+      
+      container.innerHTML = 
+        `<h2 class="animate-title">${data.title}</h2>
+        <p class="date-display"><strong>Date:</strong> ${data.date}</p>
+        <div class="media-container">${mediaContent}</div>
+        <div class="explanation-container">
+          <h3>À propos de cette image</h3>
+          <p class="explanation">${data.explanation}</p>
+        </div>
+        ${data.copyright ? `<p class="copyright">© ${data.copyright}</p>` : ''}`;
     }
 
     function searchAPOD() {
@@ -233,23 +475,99 @@
       if (date) {
         currentDate = date;
         fetchAPOD(date);
+      } else {
+        alert("Veuillez sélectionner une date");
       }
     }
 
     function loadAPOD(direction) {
+      if (direction === 'today') {
+        // Charger l'APOD du jour actuel
+        const today = new Date().toISOString().split('T')[0];
+        currentDate = today;
+        document.getElementById('date-input').value = currentDate;
+        fetchAPOD(currentDate);
+        return;
+      }
+      
       const date = new Date(currentDate);
+      
       if (direction === 'previous') {
         date.setDate(date.getDate() - 1); // Précédent
+        
+        // Animation pour indiquer la direction
+        const contentDiv = document.getElementById('apod-content');
+        contentDiv.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+        contentDiv.style.transform = 'translateX(100%)';
+        contentDiv.style.opacity = '0';
+        
+        setTimeout(() => {
+          currentDate = date.toISOString().split('T')[0];
+          document.getElementById('date-input').value = currentDate; // Mettre à jour le champ de date
+          fetchAPOD(currentDate);
+        }, 500);
+        
       } else if (direction === 'next') {
+        const today = new Date();
+        
+        if (date.getTime() >= today.getTime()) {
+          // Effet de secousse pour indiquer l'erreur
+          const navButtons = document.querySelector('.nav-buttons');
+          navButtons.style.animation = 'shake 0.5s ease';
+          setTimeout(() => { navButtons.style.animation = ''; }, 500);
+          
+          showNotification("Impossible d'afficher des images futures");
+          return;
+        }
+        
         date.setDate(date.getDate() + 1); // Suivant
+        
+        // Animation pour indiquer la direction
+        const contentDiv = document.getElementById('apod-content');
+        contentDiv.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+        contentDiv.style.transform = 'translateX(-100%)';
+        contentDiv.style.opacity = '0';
+        
+        setTimeout(() => {
+          currentDate = date.toISOString().split('T')[0];
+          document.getElementById('date-input').value = currentDate; // Mettre à jour le champ de date
+          fetchAPOD(currentDate);
+        }, 500);
       }
-      currentDate = date.toISOString().split('T')[0];
-      fetchAPOD(currentDate);
     }
-
-    // Chargement initial de l'APOD
-    fetchAPOD(currentDate);
+    
+    // Affiche une notification
+    function showNotification(message) {
+      // Créer l'élément de notification s'il n'existe pas
+      let notification = document.getElementById('notification');
+      if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'notification';
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.left = '50%';
+        notification.style.transform = 'translateX(-50%)';
+        notification.style.backgroundColor = 'rgba(255, 50, 50, 0.9)';
+        notification.style.color = 'white';
+        notification.style.padding = '10px 20px';
+        notification.style.borderRadius = '5px';
+        notification.style.zIndex = '1000';
+        notification.style.boxShadow = '0 3px 10px rgba(0, 0, 0, 0.3)';
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.3s ease';
+        document.body.appendChild(notification);
+      }
+      
+      notification.textContent = message;
+      notification.style.opacity = '1';
+      
+      // Faire disparaître la notification après 3 secondes
+      setTimeout(() => {
+        notification.style.opacity = '0';
+      }, 3000);
+    }
   </script>
 
 </body>
 </html>
+
