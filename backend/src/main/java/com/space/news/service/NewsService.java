@@ -3,10 +3,12 @@ package com.space.news.service;
 import com.space.news.model.Article;
 import com.space.news.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -45,9 +47,16 @@ public class NewsService {
             article.setContent(summary);
             article.setImageUrl(imageUrl);
             article.setUrl(url);
-            article.setSummary(summary); // optional field
+            article.setSummary(summary);
+            article.setPublishedAt(LocalDateTime.now());
 
             articleRepository.save(article);
         }
+    }
+
+    @Scheduled(cron = "0 0 8 * * *") // import kolla nhar m3a 8 sba7
+    public void scheduledImport() {
+        System.out.println("🚀 Scheduled import starting...");
+        importArticlesFromSpaceflightAPI();
     }
 }
