@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Space News - Home</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            background-color: #0a0a15;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); /* 👈 wider cards */
+            gap: 24px;
+            padding: 30px;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            background-color: #12122b;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(255,255,255,0.05);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            margin: 0 0 10px;
+            font-size: 1.2rem;
+            min-height: 60px;
+        }
+
+        .card-content p {
+            margin: 10px 0;
+            color: #ccc;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #5e72eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 12px;
+        }
+
+        .pagination {
+            text-align: center;
+            margin: 30px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 5px;
+            background-color: #5e72eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        .pagination button:disabled {
+            background-color: #333;
+            cursor: not-allowed;
+        }
+
+        #loader {
+            text-align: center;
+            margin: 50px;
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Latest Space News</h1>
+<div id="loader">Loading articles...</div>
+<main class="grid" id="articles" style="display:none;"></main>
+<div class="pagination" id="pagination"></div>
+
+<script>
+    const articlesPerPage = 20;
+    let articles = [];
+    let currentPage = 1;
+
+    function renderArticles() {
+        const start = (currentPage - 1) * articlesPerPage;
+        const end = start + articlesPerPage;
+        const paginated = articles.slice(start, end);
+
+        const container = document.getElementById('articles');
+        container.innerHTML = '';
+        paginated.forEach(article => {
+            container.innerHTML += `
+          <div class="card">
+            <img src="${article.imageUrl || ''}" alt="News Image">
+            <div class="card-content">
+              <h3>${article.title}</h3>
+              <div>
+                <p>📅 ${article.publishedAt}</p>
+                <a href="single.html?id=${article.id}" class="btn">Read More</a>
+              </div>
+            </div>
+          </div>
+        `;
+        });
+
+        container.style.display = 'grid';
+        document.getElementById('loader').style.display = 'none';
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(articles.length / articlesPerPage);
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            pagination.innerHTML += `<button onclick="goToPage(${i})" ${i === currentPage ? 'disabled' : ''}>${i}</button>`;
+        }
+    }
+
+    function goToPage(page) {
+        currentPage = page;
+        renderArticles();
+    }
+
+    fetch('http://localhost:8080/api/articles')
+        .then(response => response.json())
+        .then(data => {
+            articles = data;
+            renderArticles();
+        });
+</script>
+
+</body>
+</html>
