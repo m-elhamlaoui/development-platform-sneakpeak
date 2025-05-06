@@ -1,33 +1,60 @@
-HELP.md
-target/
+# ======================
+# Java + Spring Boot
+# ======================
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# Maven
+/target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Gradle (if used)
+.gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
 .vscode/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Environment & config
+.env
+*.properties.local
+application-dev.properties
+application-prod.properties
+application-test.properties
+
+# PostgreSQL dump or temp
+*.sql
+*.dump
+
+# Node modules (if frontend embedded)
+node_modules/
+dist/
+
+# JetBrains Rider
+.idea/
+
+# Others
+*.swp
