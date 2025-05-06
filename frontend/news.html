@@ -18,9 +18,21 @@
             padding: 30px;
         }
 
+        .filters {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .filters input, .filters button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); /* 👈 wider cards */
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
             gap: 24px;
             padding: 30px;
         }
@@ -29,7 +41,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 100%;
             background-color: #12122b;
             border-radius: 10px;
             overflow: hidden;
@@ -74,6 +85,7 @@
             text-decoration: none;
             border-radius: 5px;
             margin-top: 12px;
+            cursor: pointer;
         }
 
         .pagination {
@@ -106,36 +118,63 @@
 </head>
 <body>
 
-<h1>Latest Space News</h1>
+<h1>Space News</h1>
+
+<div class="filters">
+    <input type="text" id="keywordInput" placeholder="Search by keyword...">
+    <input type="date" id="dateInput">
+    <button onclick="applyFilters()" class="btn">Search</button>
+    <button onclick="clearFilters()" class="btn">Reset</button>
+</div>
+
 <div id="loader">Loading articles...</div>
 <main class="grid" id="articles" style="display:none;"></main>
 <div class="pagination" id="pagination"></div>
 
 <script>
-    const articlesPerPage = 20;
+    const articlesPerPage = 12;
     let articles = [];
+    let filteredArticles = [];
     let currentPage = 1;
+
+    function fetchArticles() {
+        fetch('http://localhost:8080/api/articles')
+            .then(response => response.json())
+            .then(data => {
+                articles = data;
+                filteredArticles = data;
+                renderArticles();
+            });
+    }
 
     function renderArticles() {
         const start = (currentPage - 1) * articlesPerPage;
         const end = start + articlesPerPage;
-        const paginated = articles.slice(start, end);
+        const paginated = filteredArticles.slice(start, end);
 
         const container = document.getElementById('articles');
         container.innerHTML = '';
+
+        if (filteredArticles.length === 0) {
+            container.innerHTML = `<p style="text-align:center; color: #ccc;">No articles found for your search.</p>`;
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+
         paginated.forEach(article => {
             container.innerHTML += `
-          <div class="card">
-            <img src="${article.imageUrl || ''}" alt="News Image">
-            <div class="card-content">
-              <h3>${article.title}</h3>
-              <div>
-                <p>📅 ${article.publishedAt}</p>
-                <a href="single.html?id=${article.id}" class="btn">Read More</a>
-              </div>
-            </div>
+      <div class="card">
+        <img src="${article.imageUrl || ''}" alt="News Image">
+        <div class="card-content">
+          <h3>${article.title}</h3>
+          <div>
+            <p>📅 ${article.publishedAt}</p>
+            <a href="single.html?id=${article.id}" class="btn">Read More</a>
           </div>
-        `;
+        </div>
+      </div>
+    `;
         });
 
         container.style.display = 'grid';
@@ -143,8 +182,9 @@
         renderPagination();
     }
 
+
     function renderPagination() {
-        const totalPages = Math.ceil(articles.length / articlesPerPage);
+        const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
         const pagination = document.getElementById('pagination');
         pagination.innerHTML = '';
 
@@ -158,12 +198,31 @@
         renderArticles();
     }
 
-    fetch('http://localhost:8080/api/articles')
-        .then(response => response.json())
-        .then(data => {
-            articles = data;
-            renderArticles();
+    function applyFilters() {
+        const keyword = document.getElementById('keywordInput').value.toLowerCase();
+        const selectedDate = document.getElementById('dateInput').value;
+
+        filteredArticles = articles.filter(article => {
+            const matchesKeyword =
+                article.title.toLowerCase().includes(keyword) ||
+                article.content.toLowerCase().includes(keyword);
+            const matchesDate = selectedDate ? article.publishedAt === selectedDate : true;
+            return matchesKeyword && matchesDate;
         });
+
+        currentPage = 1;
+        renderArticles();
+    }
+
+    function clearFilters() {
+        document.getElementById('keywordInput').value = '';
+        document.getElementById('dateInput').value = '';
+        filteredArticles = articles;
+        currentPage = 1;
+        renderArticles();
+    }
+
+    fetchArticles();
 </script>
 
 </body>
