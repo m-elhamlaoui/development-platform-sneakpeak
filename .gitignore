@@ -1,0 +1,60 @@
+# ======================
+# Java + Spring Boot
+# ======================
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Gradle (if used)
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Environment & config
+.env
+*.properties.local
+application-dev.properties
+application-prod.properties
+application-test.properties
+
+# PostgreSQL dump or temp
+*.sql
+*.dump
+
+# Node modules (if frontend embedded)
+node_modules/
+dist/
+
+# JetBrains Rider
+.idea/
+
+# Others
+*.swp

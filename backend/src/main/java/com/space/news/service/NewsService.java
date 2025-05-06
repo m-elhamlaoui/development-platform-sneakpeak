@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +48,7 @@ public class NewsService {
             article.setImageUrl(imageUrl);
             article.setUrl(url);
             article.setSummary(summary);
-            article.setPublishedAt(LocalDateTime.now());
+            article.setPublishedAt(LocalDate.now());
 
             articleRepository.save(article);
         }

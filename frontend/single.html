@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Space News - Article</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            background-color: #0a0a15;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #12122b;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.05);
+        }
+        img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 8px 12px;
+            background: #5e72eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        a.source-link {
+            color: #9cc2ff;
+            text-decoration: underline;
+            display: block;
+            margin-top: 15px;
+        }
+        #loader {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="article">
+    <p id="loader">Loading article...</p>
+</div>
+
+<script>
+    const articleId = new URLSearchParams(window.location.search).get('id');
+
+    fetch(`http://localhost:8080/api/articles/${articleId}`)
+        .then(response => {
+            if (!response.ok) throw new Error("Article not found.");
+            return response.json();
+        })
+        .then(article => {
+            const container = document.getElementById('article');
+            container.innerHTML = `
+          <h1>${article.title}</h1>
+          <p><small>📅 : ${article.publishedAt}</small></p>
+          <img src="${article.imageUrl || ''}" alt="Article Image">
+          <p>${article.content}</p>
+          <a class="source-link" href="${article.url}" target="_blank">🔗 Original Source</a>
+          <a href="news.html" class="btn">Go Back</a>
+        `;
+        })
+        .catch(error => {
+            const container = document.getElementById('article');
+            container.innerHTML = `<p style="color: #ff9190; text-align:center;">⚠️ Article could not be loaded.</p>`;
+            console.error(error);
+        });
+</script>
+</body>
+</html>

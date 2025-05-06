@@ -1,7 +1,7 @@
 package com.space.news.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 public class Article {
@@ -21,7 +21,7 @@ public class Article {
     @Column(length = 1000)
     private String imageUrl;
 
-    private LocalDateTime publishedAt;
+    private LocalDate publishedAt;
 
     @Column(length = 10000)
     private String content;
@@ -73,11 +73,11 @@ public class Article {
         this.imageUrl = imageUrl;
     }
 
-    public LocalDateTime getPublishedAt() {
+    public LocalDate getPublishedAt() {
         return publishedAt;
     }
 
-    public void setPublishedAt(LocalDateTime publishedAt) {
+    public void setPublishedAt(LocalDate publishedAt) {
         this.publishedAt = publishedAt;
     }
 
