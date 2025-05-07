@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NASA Astronomy Picture of the Day</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    img { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <h1>NASA Astronomy Picture of the Day</h1>
+  <div id="apod-content">
+    <p>Chargement...</p>
+  </div>
+
+  <script>
+    // Remplace "YOUR_API_KEY_HERE" par ta clé personnelle reçue par mail
+    const apiKey = "0mOIG3D2i5Bu3MNauyX1hznLdR8adSZOKDbfZVZc";
+    const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById("apod-content");
+        container.innerHTML = `
+          <h2>${data.title}</h2>
+          <p><strong>Date:</strong> ${data.date}</p>
+          <img src="${data.url}" alt="${data.title}" />
+          <p>${data.explanation}</p>
+        `;
+      })
+      .catch(error => {
+        document.getElementById("apod-content").innerHTML =
+          "<p>Erreur lors du chargement de l'image.</p>";
+        console.error("Erreur:", error);
+      });
+  </script>
+</body>
+</html>
