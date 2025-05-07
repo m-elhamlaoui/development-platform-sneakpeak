@@ -4,14 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
-@Table(name = "users",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
-                @UniqueConstraint(columnNames = "email")
-        })
-public class User {
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +23,7 @@ public class User {
 
     @NotBlank
     @Size(max = 50)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @NotBlank
@@ -31,22 +36,18 @@ public class User {
     private String password;
 
     private String firstName;
-
     private String lastName;
 
     private boolean enabled = true;
-
     private boolean accountNonExpired = true;
-
     private boolean accountNonLocked = true;
-
     private boolean credentialsNonExpired = true;
 
     private Long lastLoginAt;
-
     private Long createdAt;
 
     // --- Getters and Setters ---
+
     public Long getId() {
         return id;
     }
@@ -141,5 +142,12 @@ public class User {
 
     public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
+    }
+
+    // --- UserDetails methods ---
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList(); // add roles if needed
     }
 }

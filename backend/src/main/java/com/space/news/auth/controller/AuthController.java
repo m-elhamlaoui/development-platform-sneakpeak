@@ -32,7 +32,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "redirect:login.html";
+        return "redirect:/login.html";
     }
 
     @PostMapping("/login")
@@ -44,7 +44,7 @@ public class AuthController {
 
     @GetMapping("/")
     public String index() {
-        return "redirect:index.html";
+        return "redirect:/home.html";
     }
 
     @PostMapping("/register")
@@ -52,10 +52,10 @@ public class AuthController {
                                @RequestParam("email") String email,
                                @RequestParam("password") String password) {
         if (userRepository.existsByUsername(username)) {
-            return "redirect:register.html?error=username";
+            return "redirect:/register.html?error=username";
         }
         if (userRepository.existsByEmail(email)) {
-            return "redirect:register.html?error=email";
+            return "redirect:/register.html?error=email";
         }
 
         User user = new User();
@@ -64,7 +64,7 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(password));
 
         userRepository.save(user);
-        return "redirect:login.html?registered";
+        return "redirect:/login.html?registered";
     }
 
 }
