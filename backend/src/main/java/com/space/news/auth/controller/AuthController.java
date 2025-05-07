@@ -44,7 +44,7 @@ public class AuthController {
 
     @GetMapping("/")
     public String index() {
-        return "redirect:index.html";
+        return "redirect:home.html";
     }
 
     @PostMapping("/register")

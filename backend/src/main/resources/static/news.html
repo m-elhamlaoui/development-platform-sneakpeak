@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Smart Space News - Home</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <title>Smart Space News</title>
+    <link rel="stylesheet" href="css/style.css" />
     <style>
         body {
             background-color: #0a0a15;
@@ -38,19 +38,16 @@
         }
 
         .card {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
             background-color: #12122b;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 0 10px rgba(255,255,255,0.05);
-            transition: transform 0.5s ease, opacity 0.5s ease;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease, opacity 0.3s ease;
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
         }
 
-        .card.visible {
+        .card.show {
             opacity: 1;
             transform: translateY(0);
         }
@@ -59,216 +56,186 @@
             width: 100%;
             height: 200px;
             object-fit: cover;
-            display: block;
+            cursor: pointer;
         }
 
         .card-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
             padding: 20px;
         }
 
         .card-content h3 {
-            margin: 0 0 10px;
+            margin-top: 0;
+            margin-bottom: 10px;
             font-size: 1.2rem;
-            min-height: 60px;
         }
 
-        .card-content p {
-            margin: 10px 0;
-            color: #ccc;
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bookmark-icon {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: gold;
+            stroke-width: 2;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .bookmark-icon.saved {
+            fill: gold;
         }
 
         .btn {
-            display: inline-block;
             padding: 8px 12px;
             background: #5e72eb;
             color: white;
-            text-decoration: none;
+            border: none;
             border-radius: 5px;
-            margin-top: 10px;
+            margin: 10px;
             cursor: pointer;
         }
 
         #loader {
             text-align: center;
-            margin: 40px auto;
+            margin: 50px;
+            font-size: 1.2rem;
+            color: #aaa;
         }
 
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top: 4px solid #5e72eb;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            margin: auto;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        #loadMoreBtn {
-            margin: 30px auto;
-            display: none;
-        }
-
-        #backToTopBtn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: none;
-            background-color: #5e72eb;
+        #loadMore {
+            display: block;
+            margin: 20px auto 60px;
+            padding: 10px 20px;
+            background: #5e72eb;
             color: white;
             border: none;
-            width: 44px;
-            height: 44px;
-            font-size: 20px;
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(94,114,235,0.4);
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
-        #backToTopBtn:hover {
-            background-color: #4354d9;
+        .top-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #5e72eb;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 22px;
+            color: white;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            display: flex;
         }
+
     </style>
 </head>
 <body>
 
-<h1>Space News</h1>
+<h1>Smart Space News</h1>
 
-<!-- Filters -->
 <div class="filters">
-    <input type="text" id="keywordInput" placeholder="Search by keyword...">
-    <input type="date" id="dateInput">
+    <input type="text" id="keywordInput" placeholder="Search by keyword..." />
+    <input type="date" id="dateInput" />
     <button onclick="applyFilters()" class="btn">Search</button>
     <button onclick="clearFilters()" class="btn">Reset</button>
-    <button onclick="toggleSavedView()" class="btn" id="savedToggleBtn">View Saved</button>
+    <button onclick="toggleSavedView()" class="btn" id="toggleSavedBtn">View Saved</button>
 </div>
 
-<!-- Loader -->
-<div id="loader"><div class="spinner"></div></div>
-
-<!-- Articles -->
-<main class="grid" id="articles" style="display:none;"></main>
-
-<!-- Load More Button -->
-<div style="text-align:center;">
-    <button id="loadMoreBtn" class="btn">Load More</button>
-</div>
-
-<!-- Back to Top Button -->
-<button id="backToTopBtn" title="Go to top">↑</button>
+<div id="loader">Loading articles...</div>
+<main class="grid" id="articles"></main>
+<button id="loadMore" class="btn">Load More</button>
+<button class="top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
 
 <script>
-    const articlesPerPage = 12;
+    const articlesPerPage = 10;
     let articles = [];
-    let filteredArticles = [];
+    let filtered = [];
     let currentPage = 1;
-    let showingSaved = false;
+    let savedArticleIds = new Set();
+    let showSavedOnly = false;
 
-    function fetchArticles() {
-        fetch('http://localhost:8080/api/articles')
-            .then(response => response.json())
-            .then(data => {
-                data.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
-                articles = data;
-                filteredArticles = data;
-                renderArticles();
-            });
-    }
-
-    function isSaved(id) {
-        const saved = JSON.parse(localStorage.getItem('savedArticles') || '[]');
-        return saved.includes(id);
-    }
-
-    function saveForLater(id) {
-        const saved = JSON.parse(localStorage.getItem('savedArticles') || '[]');
-        if (!saved.includes(id)) {
-            saved.push(id);
-            localStorage.setItem('savedArticles', JSON.stringify(saved));
-            alert("Article saved!");
-        } else {
-            alert("Already saved!");
-        }
+    async function fetchArticles() {
+        const res = await fetch("/api/articles");
+        const data = await res.json();
+        data.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+        articles = data;
+        filtered = [...data];
+        await fetchSaved();
         renderArticles();
     }
 
-    function shareArticle(id) {
-        const url = `${window.location.origin}/single.html?id=${id}`;
-        navigator.clipboard.writeText(url).then(() => {
-            alert("Link copied to clipboard!");
-        });
+    async function fetchSaved() {
+        try {
+            const res = await fetch("/api/saved/list");
+            if (!res.ok) return;
+            const data = await res.json();
+            savedArticleIds = new Set(data.map(a => a.id));
+        } catch (e) {}
     }
 
     function renderArticles() {
-        const start = 0;
-        const end = currentPage * articlesPerPage;
-        const paginated = filteredArticles.slice(start, end);
-        const container = document.getElementById('articles');
-        container.innerHTML = '';
+        const container = document.getElementById("articles");
+        const loader = document.getElementById("loader");
+        container.innerHTML = "";
+        loader.style.display = "none";
 
-        if (filteredArticles.length === 0) {
-            container.innerHTML = `<p style="text-align:center; color: #ccc;">No articles found for your search.</p>`;
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('loadMoreBtn').style.display = 'none';
+        let toRender = showSavedOnly
+            ? articles.filter(a => savedArticleIds.has(a.id))
+            : filtered;
+
+        const paginated = toRender.slice(0, currentPage * articlesPerPage);
+
+        if (toRender.length === 0) {
+            container.innerHTML = "<p style='text-align:center;'>No articles found.</p>";
+            document.getElementById("loadMore").style.display = "none";
             return;
         }
 
-        paginated.forEach(article => {
-            const cardHTML = `
-        <div class="card" data-id="${article.id}">
-          <a href="single.html?id=${article.id}">
-            <img loading="lazy" src="${article.imageUrl || ''}" alt="News Image">
-          </a>
-          <div class="card-content">
-            <h3>${article.title}</h3>
-            <div>
-              <p>📅 ${article.publishedAt}</p>
-              <button class="btn" onclick="shareArticle(${article.id})">Share</button>
-              <button class="btn" onclick="saveForLater(${article.id})">
-                ${isSaved(article.id) ? "Saved ✓" : "Save"}
-              </button>
-            </div>
+        paginated.forEach((article) => {
+            const card = document.createElement("div");
+            card.classList.add("card");
+
+            const isSaved = savedArticleIds.has(article.id);
+            const icon = `
+        <svg onclick="toggleSave(${article.id}, this)" class="bookmark-icon ${isSaved ? "saved" : ""}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18l-7-5-7 5V4z"/>
+        </svg>`;
+
+            card.innerHTML = `
+        <img src="${article.imageUrl || ''}" alt="News Image" loading="lazy" onclick="location.href='single.html?id=${article.id}'">
+        <div class="card-content">
+          <h3>${article.title}</h3>
+          <div class="info-bar">
+            <p>📅 ${article.publishedAt}</p>
+            ${icon}
           </div>
         </div>
       `;
-            container.insertAdjacentHTML('beforeend', cardHTML);
+
+            document.getElementById("articles").appendChild(card);
+            setTimeout(() => card.classList.add("show"), 100);
         });
 
-        // Observe cards for animation
-        document.querySelectorAll('.card:not(.visible)').forEach(card => observer.observe(card));
-
-        container.style.display = 'grid';
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('loadMoreBtn').style.display =
-            (end >= filteredArticles.length) ? 'none' : 'inline-block';
-    }
-
-    function renderPagination() {
-        // optional if you want to add pagination buttons
+        const loadMoreBtn = document.getElementById("loadMore");
+        loadMoreBtn.style.display = paginated.length < toRender.length ? "block" : "none";
     }
 
     function applyFilters() {
-        const keyword = document.getElementById('keywordInput').value.toLowerCase();
-        const selectedDate = document.getElementById('dateInput').value;
-        const saved = JSON.parse(localStorage.getItem('savedArticles') || '[]');
+        const keyword = document.getElementById("keywordInput").value.toLowerCase();
+        const date = document.getElementById("dateInput").value;
 
-        filteredArticles = articles.filter(article => {
-            const matchesKeyword =
-                article.title.toLowerCase().includes(keyword) ||
-                article.content.toLowerCase().includes(keyword);
-            const matchesDate = selectedDate ? article.publishedAt === selectedDate : true;
-            const matchesSaved = showingSaved ? saved.includes(article.id) : true;
-            return matchesKeyword && matchesDate && matchesSaved;
+        filtered = articles.filter(a => {
+            const matchKey = a.title.toLowerCase().includes(keyword) || a.content.toLowerCase().includes(keyword);
+            const matchDate = date ? a.publishedAt === date : true;
+            return matchKey && matchDate;
         });
 
         currentPage = 1;
@@ -276,52 +243,48 @@
     }
 
     function clearFilters() {
-        document.getElementById('keywordInput').value = '';
-        document.getElementById('dateInput').value = '';
-        showingSaved = false;
-        document.getElementById('savedToggleBtn').textContent = "View Saved";
-        filteredArticles = articles;
+        document.getElementById("keywordInput").value = "";
+        document.getElementById("dateInput").value = "";
+        filtered = [...articles];
         currentPage = 1;
         renderArticles();
     }
 
     function toggleSavedView() {
-        showingSaved = !showingSaved;
-        document.getElementById('savedToggleBtn').textContent = showingSaved ? "Show All" : "View Saved";
-        applyFilters();
+        showSavedOnly = !showSavedOnly;
+        document.getElementById("toggleSavedBtn").textContent = showSavedOnly ? "View All" : "View Saved";
+        currentPage = 1;
+        renderArticles();
     }
 
-    document.getElementById('loadMoreBtn').addEventListener('click', () => {
+    async function toggleSave(articleId, iconEl) {
+        const isSaved = iconEl.classList.contains("saved");
+        const url = `/api/saved/${articleId}/${isSaved ? "remove" : "save"}`;
+
+        const res = await fetch(url, { method: isSaved ? "DELETE" : "POST" });
+        if (res.ok) {
+            if (isSaved) {
+                savedArticleIds.delete(articleId);
+                iconEl.classList.remove("saved");
+                if (showSavedOnly) renderArticles();
+            } else {
+                savedArticleIds.add(articleId);
+                iconEl.classList.add("saved");
+            }
+        } else {
+            alert("Login required to save articles.");
+        }
+    }
+
+    document.getElementById("loadMore").addEventListener("click", () => {
         currentPage++;
         renderArticles();
     });
 
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-        const scrollPosition = window.innerHeight + scrollY;
-        const nearBottom = document.body.offsetHeight - 100;
-
-        if (scrollPosition >= nearBottom && filteredArticles.length > currentPage * articlesPerPage) {
-            currentPage++;
-            renderArticles();
-        }
-
-        document.getElementById('backToTopBtn').style.display = scrollY > 300 ? 'block' : 'none';
+    window.addEventListener("scroll", () => {
+        const btn = document.querySelector(".top-btn");
+        btn.style.display = window.scrollY > 300 ? "block" : "none";
     });
-
-    document.getElementById('backToTopBtn').addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Animate cards on scroll
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
 
     fetchArticles();
 </script>
