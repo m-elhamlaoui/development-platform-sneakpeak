@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 
-@EnableScheduling
 @SpringBootApplication
 @EnableScheduling
 public class NewsApplication {
