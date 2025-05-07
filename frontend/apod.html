@@ -346,36 +346,36 @@
     <h1>NASA Astronomy Picture of the Day</h1>
   </header>
 
-  <!-- Recherche par date -->
+  <!-- Search by date -->
   <div id="search-container">
-    <label for="date-input">Sélectionnez une date:</label>
+    <label for="date-input">Select a date:</label>
     <input type="date" id="date-input" />
-    <button onclick="searchAPOD()">Rechercher</button>
+    <button onclick="searchAPOD()">Search</button>
   </div>
 
-  <!-- Contenu principal -->
+  <!-- Main content -->
   <div id="apod-content">
     <div class="loader">
-      <p>Chargement...</p>
+      <p>Loading...</p>
     </div>
   </div>
 
   <!-- Navigation -->
   <div class="nav-buttons">
     <button onclick="loadAPOD('previous')" class="nav-btn prev-btn">
-      <span class="arrow">&#10094;</span> Précédent
+      <span class="arrow">&#10094;</span> Previous
     </button>
     <button onclick="loadAPOD('today')" class="nav-btn today-btn">
-      Aujourd'hui
+      Today
     </button>
     <button onclick="loadAPOD('next')" class="nav-btn next-btn">
-      Suivant <span class="arrow">&#10095;</span>
+      Next <span class="arrow">&#10095;</span>
     </button>
   </div>
 
-  <!-- Bouton retour à l'accueil -->
+  <!-- Return to home button -->
   <button id="home-button" onclick="window.location.href='index.html'">
-    <span class="home-icon">&#8962;</span> Retour à l'Accueil
+    <span class="home-icon">&#8962;</span> Return to Home
   </button>
 
   <footer>
@@ -384,15 +384,15 @@
 
   <script>
     const apiKey = "0mOIG3D2i5Bu3MNauyX1hznLdR8adSZOKDbfZVZc";
-    let currentDate = new Date().toISOString().split('T')[0]; // Date actuelle
+    let currentDate = new Date().toISOString().split('T')[0]; // Current date
     let currentData = null;
 
-    // Initialiser la date dans le champ de recherche
+    // Initialize the date in the search field
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('date-input').value = currentDate;
-      fetchAPOD(currentDate); // Charger automatiquement l'APOD du jour au chargement
+      fetchAPOD(currentDate); // Automatically load today's APOD on page load
       
-      // Animation du titre principal
+      // Main title animation
       const header = document.querySelector('header h1');
       header.style.opacity = '0';
       header.style.transform = 'translateY(-20px)';
@@ -410,7 +410,7 @@
       container.style.transform = 'translateY(20px)';
       
       container.innerHTML = `<div class="loader">
-                                <p>Chargement de l'image du ${formatDate(date)}...</p>
+                                <p>Loading image for ${formatDate(date)}...</p>
                                 <div class="loading-stars">
                                   <span>⋆</span><span>⋆</span><span>⋆</span>
                                 </div>
@@ -431,27 +431,27 @@
         })
         .then(data => {
           currentData = data;
-          // Ajout d'un délai pour une meilleure animation
+          // Add delay for better animation
           setTimeout(() => {
             displayAPOD(data);
           }, 300);
         })
         .catch(error => {
-          container.innerHTML = `<p>Erreur lors du chargement de l'image: ${error.message}</p>`;
-          console.error("Erreur:", error);
+          container.innerHTML = `<p>Error loading image: ${error.message}</p>`;
+          console.error("Error:", error);
         });
     }
     
-    // Fonction pour formater la date en français
+    // Function to format date in English
     function formatDate(dateStr) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      return new Date(dateStr).toLocaleDateString('fr-FR', options);
+      return new Date(dateStr).toLocaleDateString('en-US', options);
     }
 
     function displayAPOD(data) {
       const container = document.getElementById("apod-content");
       
-      // Déterminer s'il s'agit d'une image ou d'une vidéo
+      // Determine if it's an image or video
       let mediaContent = '';
       if (data.media_type === 'video') {
         mediaContent = `<iframe width="100%" height="400" src="${data.url}" frameborder="0" allowfullscreen></iframe>`;
@@ -464,7 +464,7 @@
         <p class="date-display"><strong>Date:</strong> ${data.date}</p>
         <div class="media-container">${mediaContent}</div>
         <div class="explanation-container">
-          <h3>À propos de cette image</h3>
+          <h3>About this image</h3>
           <p class="explanation">${data.explanation}</p>
         </div>
         ${data.copyright ? `<p class="copyright">© ${data.copyright}</p>` : ''}`;
@@ -476,13 +476,13 @@
         currentDate = date;
         fetchAPOD(date);
       } else {
-        alert("Veuillez sélectionner une date");
+        alert("Please select a date");
       }
     }
 
     function loadAPOD(direction) {
       if (direction === 'today') {
-        // Charger l'APOD du jour actuel
+        // Load today's APOD
         const today = new Date().toISOString().split('T')[0];
         currentDate = today;
         document.getElementById('date-input').value = currentDate;
@@ -493,9 +493,9 @@
       const date = new Date(currentDate);
       
       if (direction === 'previous') {
-        date.setDate(date.getDate() - 1); // Précédent
+        date.setDate(date.getDate() - 1); // Previous
         
-        // Animation pour indiquer la direction
+        // Animation to indicate direction
         const contentDiv = document.getElementById('apod-content');
         contentDiv.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
         contentDiv.style.transform = 'translateX(100%)';
@@ -503,7 +503,7 @@
         
         setTimeout(() => {
           currentDate = date.toISOString().split('T')[0];
-          document.getElementById('date-input').value = currentDate; // Mettre à jour le champ de date
+          document.getElementById('date-input').value = currentDate; // Update date field
           fetchAPOD(currentDate);
         }, 500);
         
@@ -511,18 +511,18 @@
         const today = new Date();
         
         if (date.getTime() >= today.getTime()) {
-          // Effet de secousse pour indiquer l'erreur
+          // Shake effect to indicate error
           const navButtons = document.querySelector('.nav-buttons');
           navButtons.style.animation = 'shake 0.5s ease';
           setTimeout(() => { navButtons.style.animation = ''; }, 500);
           
-          showNotification("Impossible d'afficher des images futures");
+          showNotification("Cannot display future images");
           return;
         }
         
-        date.setDate(date.getDate() + 1); // Suivant
+        date.setDate(date.getDate() + 1); // Next
         
-        // Animation pour indiquer la direction
+        // Animation to indicate direction
         const contentDiv = document.getElementById('apod-content');
         contentDiv.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
         contentDiv.style.transform = 'translateX(-100%)';
@@ -530,15 +530,15 @@
         
         setTimeout(() => {
           currentDate = date.toISOString().split('T')[0];
-          document.getElementById('date-input').value = currentDate; // Mettre à jour le champ de date
+          document.getElementById('date-input').value = currentDate; // Update date field
           fetchAPOD(currentDate);
         }, 500);
       }
     }
     
-    // Affiche une notification
+    // Display a notification
     function showNotification(message) {
-      // Créer l'élément de notification s'il n'existe pas
+      // Create notification element if it doesn't exist
       let notification = document.getElementById('notification');
       if (!notification) {
         notification = document.createElement('div');
@@ -561,7 +561,7 @@
       notification.textContent = message;
       notification.style.opacity = '1';
       
-      // Faire disparaître la notification après 3 secondes
+      // Hide notification after 3 seconds
       setTimeout(() => {
         notification.style.opacity = '0';
       }, 3000);
@@ -570,4 +570,3 @@
 
 </body>
 </html>
-
