@@ -13,7 +13,8 @@
 *.bak
 
 # Maven
-.target/
+/target/
+/backend/target/
 !.mvn/wrapper/maven-wrapper.jar
 
 # Gradle (if used)
