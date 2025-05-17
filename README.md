@@ -47,7 +47,7 @@ The Smart Space News Aggregator is a full-stack web platform that aggregates the
 | Method | Endpoint                  | Description                     |
 |--------|---------------------------|---------------------------------|
 | GET    | `/api/articles`           | Fetch all articles              |
-| POST   | `/api/articles/import`    | Import latest articles (CI/CD) |
+| POST   | `/api/articles/import`    | Import latest articles  |
 | POST   | `/api/saved/{id}/save`    | Save article (auth required)   |
 | DELETE | `/api/saved/{id}/remove`  | Unsave article (auth required) |
 | GET    | `/api/saved/list`         | List saved articles             |
