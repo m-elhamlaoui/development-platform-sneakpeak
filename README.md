@@ -10,7 +10,7 @@ The Smart Space News Aggregator is a full-stack web platform that aggregates the
 - 📅 **Keyword & Date Filter** — Intuitive frontend filters to narrow down space news by keyword or date.
 - 📦 **Save-for-Later** — Logged-in users can bookmark articles to revisit later.
 - 🪐 **View Saved Mode** — Toggle to show only saved articles.
-- 🧠 **AI-enhanced UX** — Articles are sorted by latest, with smooth animations, lazy loading, and a "Back to Top" experience.
+- 🧠 **enhanced UX** — Articles are sorted by latest, with smooth animations, lazy loading, and a "Back to Top" experience.
 - 🖼️ **Single Article View** — Dedicated page with full content and original source link.
 - 🌍 **Public & Auth-Only Access** — Core data is publicly available; advanced features require login.
 
