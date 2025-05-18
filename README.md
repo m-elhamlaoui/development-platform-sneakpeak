@@ -7,6 +7,7 @@ The Smart Space News Aggregator is a full-stack web platform that aggregates the
 ## 🌌 Features
 
 - 🔭 **Live NASA News** — Articles imported via a public API and served dynamically.
+- 🛰️ **Mission Data Integration** — Real-time data on launches and expeditions retrieved via two public APIs from The Space Devs.
 - 📅 **Keyword & Date Filter** — Intuitive frontend filters to narrow down space news by keyword or date.
 - 📦 **Save-for-Later** — Logged-in users can bookmark articles to revisit later.
 - 🪐 **View Saved Mode** — Toggle to show only saved articles.
@@ -29,7 +30,9 @@ The Smart Space News Aggregator is a full-stack web platform that aggregates the
 - **JPA / Hibernate**
 - **PostgreSQL**
 - **REST API** to expose news, save/remove features
-- 
+- **Third-party API Integration:**
+  -- Nasa API for pace-related articles.
+  -- The Space Devs APIs for real-time launch and expedition data.
 ---
 
 ## 🔐 User Features
@@ -51,6 +54,8 @@ The Smart Space News Aggregator is a full-stack web platform that aggregates the
 | POST   | `/api/saved/{id}/save`    | Save article (auth required)   |
 | DELETE | `/api/saved/{id}/remove`  | Unsave article (auth required) |
 | GET    | `/api/saved/list`         | List saved articles             |
+| GET    | `/api/launches`           | Get launch events               |
+| GET    | `/api/expeditions`        | Get ongoing or planned expeditions              |
 
 ---
 
