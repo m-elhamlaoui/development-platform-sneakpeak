@@ -141,7 +141,8 @@
     }
   </style>
 </head>
-<body>
+<body class="has-sidebar">
+  <div id="navbar-container"></div>
 
 <header>
   <h1>Space Station Expeditions</h1>
@@ -263,6 +264,14 @@
   // Initial load
   applyFilters();
 </script>
-
+  <script>
+    fetch("navbar.html")
+            .then(res => res.text())
+            .then(html => {
+              document.getElementById("navbar-container").innerHTML = html;
+              const script = document.getElementById("navbar-container").querySelector("script");
+              if (script) eval(script.innerText);
+            });
+  </script>
 </body>
 </html>

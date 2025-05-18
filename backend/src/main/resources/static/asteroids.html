@@ -341,7 +341,8 @@
     }
   </style>
 </head>
-<body>
+<body class="has-sidebar">
+  <div id="navbar-container"></div>
   <header>
     <h1>Asteroid Data</h1>
     <p>Here is asteroid data received from NASA's API.</p>
@@ -372,7 +373,7 @@
   </div>
 
   <div class="return-link">
-    <a href="index.html">⬅️ Back to home</a>
+    <a href="home.html">⬅️ Back to home</a>
   </div>
 
   <!-- Popup -->
@@ -526,6 +527,15 @@
       dateInput.max = "2025-05-08";
       dateInput.value = "2025-05-01";
     });
+  </script>
+  <script>
+    fetch("navbar.html")
+            .then(res => res.text())
+            .then(html => {
+              document.getElementById("navbar-container").innerHTML = html;
+              const script = document.getElementById("navbar-container").querySelector("script");
+              if (script) eval(script.innerText);
+            });
   </script>
 </body>
 </html>

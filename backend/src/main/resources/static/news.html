@@ -137,7 +137,8 @@
 
     </style>
 </head>
-<body>
+<body class="has-sidebar">
+    <div id="navbar-container"></div>
 
 <h1>Smart Space News</h1>
 
@@ -288,6 +289,15 @@
 
     fetchArticles();
 </script>
+    <script>
+        fetch("navbar.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("navbar-container").innerHTML = html;
+                const script = document.getElementById("navbar-container").querySelector("script");
+                if (script) eval(script.innerText);
+            });
+    </script>
 
 </body>
 </html>

@@ -1,0 +1,81 @@
+<!-- navbar.html -->
+<div id="sidebar" class="sidebar">
+    <button id="toggleSidebarBtn" class="toggle-btn">☰</button>
+    <nav>
+        <a href="home.html">🏠 Home</a>
+        <a href="news.html">📰 News</a>
+        <a href="apod.html">🌌 APOD</a>
+        <a href="mars.html">🌕 Mars</a>
+        <a href="asteroids.html">⚡ Asteroids</a>
+        <a href="launches.html">🚀 Launches</a>
+        <a href="expeditions.html">🪐 Expeditions</a>
+        <a href="login.html">🚪 Logout</a>
+    </nav>
+</div>
+
+
+<style>
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 220px;
+        height: 100vh;
+        background-color: #1c1c2e;
+        color: #fff;
+        padding: 20px 10px;
+        transition: width 0.3s;
+        overflow-x: hidden;
+        z-index: 1000;
+    }
+
+    .sidebar.collapsed {
+        width: 60px;
+    }
+
+    .sidebar h2 {
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        white-space: nowrap;
+    }
+
+    .sidebar.collapsed h2 {
+        display: none;
+    }
+
+    .sidebar a {
+        display: block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        color: #ccc;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: background 0.2s, color 0.2s;
+        white-space: nowrap;
+    }
+
+    .sidebar a:hover {
+        background-color: #313152;
+        color: #fff;
+    }
+
+    .toggle-btn {
+        position: absolute;
+        top: 10px;
+        right: -35px;
+        background-color: #5e72eb;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('collapsed');
+    }
+</script>

@@ -46,7 +46,8 @@
         }
     </style>
 </head>
-<body>
+<body class="has-sidebar">
+    <div id="navbar-container"></div>
 <div class="container" id="article">
     <p id="loader">Loading article...</p>
 </div>
@@ -76,5 +77,14 @@
             console.error(error);
         });
 </script>
+    <script>
+        fetch("navbar.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("navbar-container").innerHTML = html;
+                const script = document.getElementById("navbar-container").querySelector("script");
+                if (script) eval(script.innerText);
+            });
+    </script>
 </body>
 </html>
