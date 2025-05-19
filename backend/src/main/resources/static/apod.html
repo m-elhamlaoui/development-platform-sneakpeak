@@ -249,6 +249,11 @@
         opacity: 1;
         transform: translateX(5px);
     }
+    .main-content {
+      margin-left: 200px; /* Match the sidebar width */
+      transition: margin-left 0.3s ease;
+    }
+
     .date-display {
         background-color: rgba(30, 60, 90, 0.6);
         display: inline-block;
@@ -340,7 +345,7 @@
     }
   </style>
 </head>
-<body class="has-sidebar">
+<body class="has-sidebar main-content">
   <div id="navbar-container"></div>
 
   <header>
