@@ -1,6 +1,6 @@
-# 🚀 News Aggregator
+# 🚀 Space News Aggregator
 
-The News Aggregator is a full-stack web platform that aggregates the latest space-related news and data from NASA and other APIs. It supports user accounts with a modern frontend and a Spring Boot backend.
+The Space News Aggregator is a full-stack web platform that aggregates the latest space-related news and data from NASA and other APIs. It supports user accounts with a modern frontend and a Spring Boot backend.
 
 ---
 
