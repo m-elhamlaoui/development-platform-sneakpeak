@@ -1,6 +1,6 @@
 # 🚀 Smart Space News Aggregator
 
-The Smart Space News Aggregator is a full-stack web platform that aggregates the latest space-related news and data from NASA and other APIs. It supports user accounts, article bookmarking, and intelligent filtering with a sleek, modern frontend and a Spring Boot backend.
+The Smart Space News Aggregator is a full-stack web platform that aggregates the latest space-related news and data from NASA and other APIs. It supports user accounts with a modern frontend and a Spring Boot backend.
 
 ---
 
@@ -31,8 +31,10 @@ The Smart Space News Aggregator is a full-stack web platform that aggregates the
 - **PostgreSQL**
 - **REST API** to expose news, save/remove features
 - **Third-party API Integration:**
-  -- Nasa API for pace-related articles.
+  -- Nasa API for space-related articles.
   -- The Space Devs APIs for real-time launch and expedition data.
+  -- APOD is a nasa api for Astronomy Picture Of the Day
+  -- Nasa API for information about asteroids close to earth
 ---
 
 ## 🔐 User Features
