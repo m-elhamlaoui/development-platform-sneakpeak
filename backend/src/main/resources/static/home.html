@@ -60,6 +60,9 @@
             padding: 60px 20px 20px;
         }
         .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
             background-color: #12122b;
             border-radius: 10px;
             overflow: hidden;
@@ -75,12 +78,31 @@
             object-fit: cover;
         }
         .card-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
             padding: 20px;
         }
+
+        .card-content > div {
+            flex-grow: 1;
+        }
+
         .card-content h3 {
-            margin-top: 0;
             margin-bottom: 10px;
         }
+
+        .card-content p {
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .card-content .btn {
+            margin-top: 15px;
+            align-self: center;
+            margin-bottom: 5px;
+        }
+
 
 
         footer {
@@ -104,22 +126,23 @@
         <a href="news.html">
             <img src="space.png" alt="NASA News">
         </a>
-        <div class="card-content" style="display: flex; flex-direction: column; height: 220px;">
-            <div style="flex-grow: 1;">
+        <div class="card-content">
+            <div>
                 <h3>Space News</h3>
                 <p>Want to know what's happening in the sky?</p>
             </div>
-            <a href="news.html" class="btn" style="align-self: flex-start;">Get Updated!</a>
+            <a href="news.html" class="btn">Get Updated!</a>
         </div>
     </div>
-
 
     <!-- Mars Rover -->
     <div class="card">
         <img src="images/mars_rover.jpg" alt="Mars Rover">
         <div class="card-content">
-            <h3>Mars Rover Explorer</h3>
-            <p>Latest photos and data from Perseverance and Curiosity.</p>
+            <div>
+                <h3>Mars Rover Explorer</h3>
+                <p>Latest photos and data from Perseverance and Curiosity.</p>
+            </div>
             <a href="/mars.html" class="btn">View All Rovers</a>
         </div>
     </div>
@@ -128,8 +151,10 @@
     <div class="card">
         <img src="launches.jpeg" alt="Launches">
         <div class="card-content">
-            <h3>Space Launches</h3>
-            <p>Explore historic space launches from around the world.</p>
+            <div>
+                <h3>Space Launches</h3>
+                <p>Explore historic space launches from around the world.</p>
+            </div>
             <a href="/launches.html" class="btn">View All Launches</a>
         </div>
     </div>
@@ -138,8 +163,10 @@
     <div class="card">
         <img src="expedition.jpeg" alt="Expeditions">
         <div class="card-content">
-            <h3>Space Expeditions</h3>
-            <p>Explore the journey of humanity beyond Earth with insights into space station expeditions.</p>
+            <div>
+                <h3>Space Expeditions</h3>
+                <p>Explore the journey of humanity beyond Earth with insights into space station expeditions.</p>
+            </div>
             <a href="/expeditions.html" class="btn">View All Expeditions</a>
         </div>
     </div>
@@ -148,12 +175,15 @@
     <div class="card">
         <img src="asteroids.jpeg" alt="Asteroids">
         <div class="card-content">
-            <h3>Asteroids</h3>
-            <p>Explore asteroids</p>
+            <div>
+                <h3>Asteroids</h3>
+                <p>Explore asteroids in our solar system and their paths.</p>
+            </div>
             <a href="/asteroids.html" class="btn">View All Asteroids</a>
         </div>
     </div>
 </main>
+
 
 <footer>
     &copy; 2025 Smart Space News Aggregator. All rights reserved.
