@@ -187,25 +187,7 @@
         }
     }
 
-    async function loadDonki() {
-        try {
-            const response = await fetch('https://api.nasa.gov/DONKI/notifications?type=all&api_key=DEMO_KEY');
-            const data = await response.json();
 
-            if (data.length > 0) {
-                const latest = data[0];
-                const alertBox = document.querySelector('.donki-alert');
-                alertBox.innerHTML = `
-                <h2>Live Space Weather Alert</h2>
-                <p><strong>Type:</strong> ${latest.messageType}</p>
-                <p>${latest.messageBody.substring(0, 300)}...</p>
-                <a href="/donki" class="btn">View Full Alerts</a>
-            `;
-            }
-        } catch (error) {
-            console.error('Failed to load DONKI data:', error);
-        }
-    }
 
     loadApod();
     loadDonki();
