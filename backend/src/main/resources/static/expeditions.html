@@ -139,9 +139,15 @@
     #modalCrew li {
       margin-bottom: 6px;
     }
+    .main-content {
+      margin-left: 200px; /* Match the sidebar width */
+      transition: margin-left 0.3s ease;
+    }
+
   </style>
 </head>
-<body>
+<body class="has-sidebar main-content">
+  <div id="navbar-container"></div>
 
 <header>
   <h1>Space Station Expeditions</h1>
@@ -263,6 +269,14 @@
   // Initial load
   applyFilters();
 </script>
-
+  <script>
+    fetch("navbar.html")
+            .then(res => res.text())
+            .then(html => {
+              document.getElementById("navbar-container").innerHTML = html;
+              const script = document.getElementById("navbar-container").querySelector("script");
+              if (script) eval(script.innerText);
+            });
+  </script>
 </body>
 </html>

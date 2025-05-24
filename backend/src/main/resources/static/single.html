@@ -44,9 +44,15 @@
             font-size: 1.2rem;
             color: #aaa;
         }
+        .main-content {
+            margin-left: 200px; /* Match the sidebar width */
+            transition: margin-left 0.3s ease;
+        }
+
     </style>
 </head>
-<body>
+<body class="has-sidebar main-content">
+    <div id="navbar-container"></div>
 <div class="container" id="article">
     <p id="loader">Loading article...</p>
 </div>
@@ -76,5 +82,14 @@
             console.error(error);
         });
 </script>
+    <script>
+        fetch("navbar.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("navbar-container").innerHTML = html;
+                const script = document.getElementById("navbar-container").querySelector("script");
+                if (script) eval(script.innerText);
+            });
+    </script>
 </body>
 </html>

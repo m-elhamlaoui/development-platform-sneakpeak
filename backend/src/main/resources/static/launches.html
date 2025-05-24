@@ -122,9 +122,15 @@
             color: white;
             opacity: 1;
         }
+        .main-content {
+            margin-left: 200px; /* Match the sidebar width */
+            transition: margin-left 0.3s ease;
+        }
+
     </style>
 </head>
-<body>
+<body class="has-sidebar main-content">
+    <div id="navbar-container"></div>
 
 <header>
     <h1>Space Launches Dashboard</h1>
@@ -250,6 +256,14 @@
     document.getElementById("load-more").addEventListener("click", loadLaunches);
     document.addEventListener("DOMContentLoaded", loadLaunches);
 </script>
-
+    <script>
+        fetch("navbar.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("navbar-container").innerHTML = html;
+                const script = document.getElementById("navbar-container").querySelector("script");
+                if (script) eval(script.innerText);
+            });
+    </script>
 </body>
 </html>
