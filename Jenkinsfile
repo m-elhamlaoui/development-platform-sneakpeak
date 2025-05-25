@@ -1,17 +1,11 @@
 pipeline {
-  /* ─── Run inside Docker CLI image so we can build & push images ─── */
-  agent {
-    docker {
-      image 'docker:24.0.5'
-      args  '-v /var/run/docker.sock:/var/run/docker.sock'
-    }
-  }
+  agent any
 
   environment {
-    REGISTRY           = 'docker.io/babayas'
-    IMAGE              = 'development-platform-sneakpeak/sneaky-backend'
-    GIT_CREDENTIALS    = 'git-pwd'
-    DOCKER_CREDENTIALS = 'docker-hub'
+    REGISTRY        = 'docker.io/babayas'
+    IMAGE           = 'development-platform-sneakpeak/sneaky-backend'
+    GIT_CREDENTIALS = 'git-pwd'
+    DOCKER_CREDS    = 'docker-hub'
   }
 
   stages {
@@ -37,12 +31,32 @@ pipeline {
       }
     }
 
+    stage('Docker Login') {
+      steps {
+        withCredentials([usernamePassword(
+          credentialsId: env.DOCKER_CREDS,
+          usernameVariable: 'DOCKER_USER',
+          passwordVariable: 'DOCKER_PASS'
+        )]) {
+          sh '''
+            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+          '''
+        }
+      }
+    }
+
     stage('Build & Push Docker Image') {
       steps {
-        script {
-          docker.withRegistry('', env.DOCKER_CREDENTIALS) {
-            def img = docker.build("${env.REGISTRY}/${env.IMAGE}:${env.BUILD_NUMBER}", './backend')
-            img.push()
+        dir('backend') {
+          script {
+            // Build
+            sh """
+              docker build \
+                --file Dockerfile \
+                --tag ${env.REGISTRY}/${env.IMAGE}:${env.BUILD_NUMBER} .
+            """
+            // Push
+            sh "docker push ${env.REGISTRY}/${env.IMAGE}:${env.BUILD_NUMBER}"
           }
         }
       }
