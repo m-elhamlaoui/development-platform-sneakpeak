@@ -2,6 +2,10 @@ pipeline {
   agent any
 
   environment {
+    // point the build at your system’s Java 21 install:
+    JAVA_HOME = '/usr/lib/jvm/java-21-openjdk-amd64'
+    PATH      = "${env.JAVA_HOME}/bin:${env.PATH}"
+
     REGISTRY        = 'docker.io/babayas'
     IMAGE           = 'development-platform-sneakpeak/sneaky-backend'
     GIT_CREDENTIALS = 'git-pwd'
@@ -31,32 +35,18 @@ pipeline {
       }
     }
 
-    stage('Docker Login') {
-      steps {
-        withCredentials([usernamePassword(
-          credentialsId: env.DOCKER_CREDS,
-          usernameVariable: 'DOCKER_USER',
-          passwordVariable: 'DOCKER_PASS'
-        )]) {
-          sh '''
-            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-          '''
+    stage('Build & Push Docker Image') {
+      agent {
+        docker {
+          image 'docker:24.0.5'
+          args  '-v /var/run/docker.sock:/var/run/docker.sock'
         }
       }
-    }
-
-    stage('Build & Push Docker Image') {
       steps {
-        dir('backend') {
-          script {
-            // Build
-            sh """
-              docker build \
-                --file Dockerfile \
-                --tag ${env.REGISTRY}/${env.IMAGE}:${env.BUILD_NUMBER} .
-            """
-            // Push
-            sh "docker push ${env.REGISTRY}/${env.IMAGE}:${env.BUILD_NUMBER}"
+        script {
+          docker.withRegistry('', env.DOCKER_CREDS) {
+            def img = docker.build("${env.REGISTRY}/${env.IMAGE}:${env.BUILD_NUMBER}", './backend')
+            img.push()
           }
         }
       }
