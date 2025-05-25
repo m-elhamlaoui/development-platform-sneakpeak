@@ -15,6 +15,9 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
+        // completely clear out any old files before pulling
+        cleanWs()
+
         checkout([
           $class: 'GitSCM',
           branches: [[name: 'origin/news-devops']],
