@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sneakpeak-app
+  labels:
+    app: sneakpeak-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sneakpeak-app
+  template:
+    metadata:
+      labels:
+        app: sneakpeak-app
+    spec:
+      containers:
+      - name: sneakpeak-app
+        image: your-registry/sneakpeak-app:latest
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5 

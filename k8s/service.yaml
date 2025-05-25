@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sneakpeak-app
+spec:
+  selector:
+    app: sneakpeak-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer 
