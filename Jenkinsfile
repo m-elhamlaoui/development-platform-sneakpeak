@@ -1,10 +1,16 @@
 pipeline {
   agent any
 
+  tools {
+    jdk 'JDK21'
+  }
+
   environment {
-    REGISTRY          = 'docker.io/babayas'
-    IMAGE             = 'development-platform-sneakpeak/sneaky-backend'
-    GIT_CREDENTIALS   = 'git-pwd'
+    JAVA_HOME          = "${tool 'JDK21'}"
+    PATH               = "${env.JAVA_HOME}/bin:${env.PATH}"
+    REGISTRY           = 'docker.io/babayas'
+    IMAGE              = 'development-platform-sneakpeak/sneaky-backend'
+    GIT_CREDENTIALS    = 'git-pwd'
     DOCKER_CREDENTIALS = 'docker-hub'
   }
 
@@ -13,10 +19,10 @@ pipeline {
       steps {
         checkout([
           $class: 'GitSCM',
-          branches: [[name: 'news-devops']],
+          branches: [[name: 'origin/news-devops']],
           userRemoteConfigs: [[
-            url: 'https://github.com/m-elhamlaoui/development-platform-sneakpeak.git',
-            credentialsId: env.GIT_CREDENTIALS
+            url           : 'https://github.com/m-elhamlaoui/development-platform-sneakpeak.git',
+            credentialsId : env.GIT_CREDENTIALS
           ]]
         ])
       }
@@ -45,11 +51,7 @@ pipeline {
   }
 
   post {
-    success {
-      echo '✅ CI pipeline completed successfully.'
-    }
-    failure {
-      echo '❌ CI pipeline failed.'
-    }
+    success { echo '✅ CI pipeline completed successfully.' }
+    failure { echo '❌ CI pipeline failed.' }
   }
 }
