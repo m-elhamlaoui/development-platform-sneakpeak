@@ -1,15 +1,17 @@
 pipeline {
   agent any
 
+  tools {
+    jdk 'JDK21'
+  }
+
   environment {
+    JAVA_HOME          = "${tool 'JDK21'}"
+    PATH               = "${env.JAVA_HOME}/bin:${env.PATH}"
     REGISTRY           = 'docker.io/babayas'
     IMAGE              = 'development-platform-sneakpeak/sneaky-backend'
     GIT_CREDENTIALS    = 'git-pwd'
     DOCKER_CREDENTIALS = 'docker-hub'
-  }
-
-  tools {
-    jdk 'JDK21'
   }
 
   stages {
@@ -17,10 +19,10 @@ pipeline {
       steps {
         checkout([
           $class: 'GitSCM',
-          branches: [[name: 'news-devops']],
+          branches: [[name: 'origin/news-devops']],
           userRemoteConfigs: [[
-            url: 'https://github.com/m-elhamlaoui/development-platform-sneakpeak.git',
-            credentialsId: env.GIT_CREDENTIALS
+            url           : 'https://github.com/m-elhamlaoui/development-platform-sneakpeak.git',
+            credentialsId : env.GIT_CREDENTIALS
           ]]
         ])
       }
@@ -30,7 +32,6 @@ pipeline {
       steps {
         dir('backend') {
           sh 'chmod +x mvnw'
-          // runs compile, tests, packaging in one go
           sh './mvnw clean package -B'
         }
       }
@@ -38,15 +39,10 @@ pipeline {
 
     stage('Build & Push Docker Image') {
       steps {
-        dir('backend') {
-          withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS,
-                                            usernameVariable: 'DOCKER_USER',
-                                            passwordVariable: 'DOCKER_PASS')]) {
-            sh '''
-              echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-              docker build -t $REGISTRY/$IMAGE:$BUILD_NUMBER .
-              docker push $REGISTRY/$IMAGE:$BUILD_NUMBER
-            '''
+        script {
+          docker.withRegistry('', env.DOCKER_CREDENTIALS) {
+            def img = docker.build("${env.REGISTRY}/${env.IMAGE}:${env.BUILD_NUMBER}", './backend')
+            img.push()
           }
         }
       }
@@ -54,11 +50,7 @@ pipeline {
   }
 
   post {
-    success {
-      echo '✅ CI pipeline completed successfully.'
-    }
-    failure {
-      echo '❌ CI pipeline failed.'
-    }
+    success { echo '✅ CI pipeline completed successfully.' }
+    failure { echo '❌ CI pipeline failed.' }
   }
 }
