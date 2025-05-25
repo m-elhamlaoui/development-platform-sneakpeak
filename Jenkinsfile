@@ -13,7 +13,7 @@ pipeline {
       steps {
         checkout([
           $class: 'GitSCM',
-          branches: [[name: '*/news-devops']],
+          branches: [[name: 'news-devops']],
           userRemoteConfigs: [[
             url: 'https://github.com/m-elhamlaoui/development-platform-sneakpeak.git',
             credentialsId: env.GIT_CREDENTIALS
@@ -24,7 +24,10 @@ pipeline {
 
     stage('Build & Test') {
       steps {
-        sh './backend/mvnw clean package -B'
+        dir('backend') {
+          sh 'chmod +x mvnw'
+          sh './mvnw clean package -B'
+        }
         junit 'backend/target/surefire-reports/*.xml'
       }
     }
