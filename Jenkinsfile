@@ -1,21 +1,13 @@
 pipeline {
-  /* ─── Use a small Alpine image with docker CLI baked in ─── */
+  /* ─── Run inside Docker CLI image so we can build & push images ─── */
   agent {
     docker {
-      image 'docker:24.0.5'                     // official Docker client image
+      image 'docker:24.0.5'
       args  '-v /var/run/docker.sock:/var/run/docker.sock'
     }
   }
 
-  tools {
-    jdk 'JDK21'                                // name of your JDK installation in Jenkins > Global Tool Config
-  }
-
   environment {
-    /* point JAVA_HOME to the tool and add it to PATH */
-    JAVA_HOME = "${tool 'JDK21'}"
-    PATH      = "${env.JAVA_HOME}/bin:${env.PATH}"
-
     REGISTRY           = 'docker.io/babayas'
     IMAGE              = 'development-platform-sneakpeak/sneaky-backend'
     GIT_CREDENTIALS    = 'git-pwd'
@@ -47,7 +39,6 @@ pipeline {
 
     stage('Build & Push Docker Image') {
       steps {
-        /* now `docker` DSL is available because we're in the docker:24… image */
         script {
           docker.withRegistry('', env.DOCKER_CREDENTIALS) {
             def img = docker.build("${env.REGISTRY}/${env.IMAGE}:${env.BUILD_NUMBER}", './backend')
