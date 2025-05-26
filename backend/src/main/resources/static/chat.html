@@ -166,7 +166,7 @@
   async function sendMessage() {
     const userText = input.value.trim();
     if (!userText) return;
-    appendMessage('You: ' + userText, 'user');
+    appendMessage(userText, 'user');
     input.value = '';
     typingIndicator.style.display = 'block'; // Show typing indicator
 
@@ -177,7 +177,7 @@
         body: JSON.stringify(userText)
       });
       const botReply = await res.text();
-      appendMessage('Bot: ' + botReply, 'bot');
+      appendMessage(botReply, 'bot');
     } catch (err) {
       appendMessage('Bot: Sorry, failed to get response.', 'bot');
     } finally {
