@@ -1,6 +1,7 @@
 # 🚀 Space News Aggregator Backend
 
 This is the backend for the **Space News Aggregator** platform — a Spring Boot-based API that provides access to real-time space-related news, article management for authenticated users, and intelligent responses via an integrated Gemini AI chatbot.
+Devops project in this github repo : https://github.com/hibaalaoui/DevOps-Space-news-aggregator
 
 ## 🌌 Features — In Detail
 
