@@ -108,6 +108,19 @@ POST   /api/v1/auth/authenticate
 - `GET /api/v1/saved-articles`: Get all saved articles by user
 - `DELETE /api/v1/saved-articles/{id}`: Delete saved article
 
+### Launches
+- `GET /2.3.0/launches`: Fetch space launches
+
+### Expeditions
+- `GET /2.3.0/expeditions`: Fetch ongoing and planned expeditions
+
+### Astronomy picture of the day
+- `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}`: Shows a picture for each day
+
+### Asteroids-NeoWs
+- `https://api.nasa.gov/neo/rest/v1/feed?start_date=${start_date}&end_date=${end_date}&api_key=${api_key}`: Retrieve a list of Asteroids based on their closest approach date to Earth
+
+
 ### Gemini AI Chat
 - `POST /api/v1/gemini/chat`: Send a prompt and receive a generated response
 
